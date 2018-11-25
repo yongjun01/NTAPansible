@@ -1,9 +1,8 @@
 hostname: 49.254.105.123
 username: admin
-password: NetApp123!
+password: Netapp123
 vserver: NTAP_kr
 aggr: n1_aggr1
 volname: NTAP_kr
 address: 49.254.105.220
-mysql_root_password: NetApp123!
-ansible_hostname: vdbench03
+ansible_hostname: vdbench22
