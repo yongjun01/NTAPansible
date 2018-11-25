@@ -37,7 +37,7 @@
       state: "{{ state }}" 
       name: "{{ volname }}" 
       aggregate_name: "{{ aggr }}" 
-      size: 1 
+      size: 15 
       size_unit: gb 
       policy: "{{ policy }}" 
       junction_path: "/{{ volname }}" 
@@ -70,16 +70,16 @@
   tasks: 
   - name: Update fstab file 
     lineinfile: 
-      path: /etc/fstab 
-      line: "{{ address }}:/{{ volname }} /mnt/ontap3 nfs defaults 0 0" 
+      path: /etc/fstab
+      line: "{{ address }}:/{{ volname }} /srv nfs defaults 0 0" 
   - name: Verify mount directory exists 
     file: 
-      path: /mnt/ontap3
+      path: /srv
       state: directory
   - name: Mount nfs export 
     mount: 
       state: mounted
-      path: /mnt/ontap3 
+      path: /srv
       src: "{{ address }}:/{{ volname }}" 
       fstype: nfs
 ...
