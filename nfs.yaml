@@ -68,6 +68,9 @@
 
 - hosts: wordpress-server
   tasks: 
+  - name: Install NFS-UTILS package for Client Server
+    yum: name=nfs-utils state=present
+    
   - name: Update fstab file 
     lineinfile: 
       path: /etc/fstab
