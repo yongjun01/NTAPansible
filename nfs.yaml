@@ -1,88 +1,73 @@
---- 
-- hosts: localhost 
+---
+- hosts: localhost
   gather_facts: false
-  name: Setup ONTAP 
-  vars: 
-    hostname: "{{ hostname }}"
-    username: "{{ username }}"
-    volname: "{{ volname }}"
-    vserver: "{{ vserver }}"
-    aggr: "{{ aggr }}"
-    address: "{{ address }}"
-    policy: ansiblePolicy 
-    state: present 
-  tasks: 
-  - name: Create Policy 
-    na_ontap_export_policy: 
-      state: "{{ state }}" 
-      name: "{{ policy }}" 
-      vserver: "{{ vserver }}" 
-      hostname: "{{ hostname }}" 
-      username: "{{ username }}" 
-      password: "{{ password }}" 
-  - name: Setup rules 
-    na_ontap_export_policy_rule: 
-      state: "{{ state }}" 
-      policy_name: "{{ policy }}" 
-      vserver: "{{ vserver }}" 
-      client_match: 0.0.0.0/0  
-      ro_rule: any 
-      rw_rule: any 
-      super_user_security: any 
-      hostname: "{{ hostname }}" 
-      username: "{{ username }}" 
-      password: "{{ password }}" 
-  - name: Create volume 
-    na_ontap_volume: 
-      state: "{{ state }}" 
-      name: "{{ volname }}" 
-      aggregate_name: "{{ aggr }}" 
-      size: 15 
-      size_unit: gb 
-      policy: "{{ policy }}" 
-      junction_path: "/{{ volname }}" 
-      space_guarantee: "none" 
-      vserver: "{{ vserver }}" 
-      hostname: "{{ hostname }}" 
-      username: "{{ username }}" 
-      password: "{{ password }}" 
-#  - name: Create QTree
-#    na_ontap_qtree:
-#      state: present
-#      name: ansibleqtree
-#      flexvol_name: "{{ volname }}"
-#      vserver: "{{ vserver }}"
-#      hostname: "{{ hostname }}"
-#      username: "{{ username }}"
-#      password: "{{ password }}"
-#
-#  - name: Rename QTree
-#    na_ontap_qtree:
-#      state: present
-#      name: ansibleQTree
-#      flexvol_name: "{{ volname }}"
-#      vserver: "{{ vserver }}"
-#      hostname: "{{ netapp_hostname }}"
-#      username: "{{ netapp_username }}"
-#      password: "{{ netapp_password }}"
+  name: Setup ONTAP
+  vars:
+    hostname: 49.254.105.140
+    username: admin
+    password: Netapp123
+    volname: test007
+    vserver: Ansible_Handson
+    aggr: aggr1_node1
+    address: 49.254.105.223
+    policy: ansiblePolicy
+    state: present
+  tasks:
+  - name: Create Policy
+    na_ontap_export_policy:
+      state: "{{ state }}"
+      name: "{{ policy }}"
+      vserver: "{{ vserver }}"
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+  - name: Setup rules
+    na_ontap_export_policy_rule:
+      state: "{{ state }}"
+      policy_name: "{{ policy }}"
+      vserver: "{{ vserver }}"
+      client_match: 0.0.0.0/0
+      ro_rule: any
+      rw_rule: any
+      super_user_security: any
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+  - name: Create volume
+    na_ontap_volume:
+      state: "{{ state }}"
+      name: "{{ volname }}"
+      aggregate_name: "{{ aggr }}"
+      size: 15
+      size_unit: gb
+      policy: "{{ policy }}"
+      junction_path: "/{{ volname }}"
+      space_guarantee: "none"
+      vserver: "{{ vserver }}"
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
 
-- hosts: wordpress-server
-  tasks: 
+- hosts: ansible-server
+  vars:
+    address: 49.254.105.223
+    volname: test007
+  tasks:
   - name: Install NFS-UTILS package for Client Server
     yum: name=nfs-utils state=present
-    
-  - name: Update fstab file 
-    lineinfile: 
+
+  - name: Update fstab file
+    lineinfile:
       path: /etc/fstab
-      line: "{{ address }}:/{{ volname }} /srv nfs defaults 0 0" 
-  - name: Verify mount directory exists 
-    file: 
+      line: "{{ address }}:/{{ volname }} /srv nfs defaults 0 0"
+  - name: Verify mount directory exists
+    file:
       path: /srv
       state: directory
-  - name: Mount nfs export 
-    mount: 
+  - name: Mount nfs export
+    mount:
       state: mounted
       path: /srv
-      src: "{{ address }}:/{{ volname }}" 
+      src: "{{ address }}:/{{ volname }}"
       fstype: nfs
 ...
