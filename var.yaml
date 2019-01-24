@@ -1,8 +1,9 @@
-hostname: 49.254.105.123
+hostname: 49.254.105.140
 username: admin
 password: Netapp123
-vserver: NTAP_kr
-aggr: n1_aggr1
-volname: NTAP_kr
-address: 49.254.105.220
-ansible_hostname: vdbench22
+vserver: Ansible_Handson
+aggr: aggr1_node1
+volname: test007
+address: 49.254.105.230
+ansible_hostname: vdbench01
+state: present
