@@ -1,9 +1,9 @@
-hostname: 49.254.105.140
-username: admin
-password: Netapp123
+hostname: xxx.xxx.xxx.xxx
+username: username
+password: password
 vserver: Ansible_Handson
 aggr: aggr1_node1
 volname: test007
-address: 49.254.105.230
+address: xxx.xxx.xxx.xxx(lif ip)
 ansible_hostname: vdbench01
 state: present
