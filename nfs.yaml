@@ -3,13 +3,13 @@
   gather_facts: false
   name: Setup ONTAP
   vars:
-    hostname: 49.254.105.140
-    username: admin
-    password: Netapp123
+    hostname: xxx.xxx.xxx.xxx
+    username: username
+    password: password
     volname: test007
     vserver: Ansible_Handson
     aggr: aggr1_node1
-    address: 49.254.105.223
+    address: xxx.xxx.xxx.xxx(lif ip)
     policy: ansiblePolicy
     state: present
   tasks:
@@ -50,7 +50,7 @@
 
 - hosts: ansible-server
   vars:
-    address: 49.254.105.223
+    address: xxx.xxx.xxx.xxx(host ip)
     volname: test007
   tasks:
   - name: Install NFS-UTILS package for Client Server
