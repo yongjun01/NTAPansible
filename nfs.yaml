@@ -64,7 +64,7 @@
       password: "{{ password }}"
 
 
-- hosts: ansible-server
+- hosts: jumphost
   vars:
     address: 49.254.105.77
     volname1: mysql_data
