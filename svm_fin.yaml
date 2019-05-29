@@ -15,13 +15,13 @@
       state: present
       name: "{{ vserver }}"
       root_volume: "{{ vserver}}_root"
-      root_volume_aggregate: n1_aggr1
+      root_volume_aggregate: aggr1_node1
       root_volume_security_style: mixed
       <<: *login
   - name: Create interface
     na_ontap_interface:
       state: present
-      interface_name: "{{ vserver }}_mgmt_data_1"
+      interface_name: "{{ vserver }}_lif_1"
       home_port: e0b
       home_node: Select-cluster-01
       role: data
