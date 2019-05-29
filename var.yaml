@@ -1,6 +1,6 @@
 hostname: 49.254.105.140
-username: username
-password: password
+username: admin
+password: Netapp123
 vserver: cds_test
 aggr: aggr1_node1
 address: 49.254.105.221
