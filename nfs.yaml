@@ -3,24 +3,24 @@
   gather_facts: false
   name: Setup ONTAP
   vars:
-    hostname: xxx.xxx.xxx.xxx
-    username: username
-    password: password
-    volname: test007
-    vserver: Ansible_Handson
-    aggr: aggr1_node1
-    address: xxx.xxx.xxx.xxx(lif ip)
-    policy: ansiblePolicy
-    state: present
+    login: &login
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      volname1: mysql_data
+      volname2: wordpress_core
+      vserver: cds_test
+      aggr: aggr1_node1
+      address: "{{ address }}"
+      policy: ansiblePolicy
+      state: present
   tasks:
   - name: Create Policy
     na_ontap_export_policy:
       state: "{{ state }}"
       name: "{{ policy }}"
       vserver: "{{ vserver }}"
-      hostname: "{{ hostname }}"
-      username: "{{ username }}"
-      password: "{{ password }}"
+      <<: *login
   - name: Setup rules
     na_ontap_export_policy_rule:
       state: "{{ state }}"
@@ -30,44 +30,71 @@
       ro_rule: any
       rw_rule: any
       super_user_security: any
-      hostname: "{{ hostname }}"
-      username: "{{ username }}"
-      password: "{{ password }}"
-  - name: Create volume
+      <<: *login
+  - name: Create volume for mysql data
     na_ontap_volume:
       state: "{{ state }}"
-      name: "{{ volname }}"
+      name: "{{ volname1 }}"
       aggregate_name: "{{ aggr }}"
       size: 15
       size_unit: gb
       policy: "{{ policy }}"
-      junction_path: "/{{ volname }}"
+      junction_path: "/{{ volname1 }}"
       space_guarantee: "none"
       vserver: "{{ vserver }}"
-      hostname: "{{ hostname }}"
-      username: "{{ username }}"
-      password: "{{ password }}"
+      <<: *login
+  - name: Create volume for wordpress core file
+    na_ontap_volume:
+      state: "{{ state }}"
+      name: "{{ volname2 }}"
+      aggregate_name: "{{ aggr }}"
+      size: 15
+      size_unit: gb
+      policy: "{{ policy }}"
+      junction_path: "/{{ volname2 }}"
+      space_guarantee: "none"
+      vserver: "{{ vserver }}"
+      <<: *login
 
 - hosts: ansible-server
   vars:
-    address: xxx.xxx.xxx.xxx(host ip)
-    volname: test007
+    address: 49.254.105.77
+    volname1: mysql_data
+    volname2: wordpress_core
   tasks:
   - name: Install NFS-UTILS package for Client Server
     yum: name=nfs-utils state=present
 
-  - name: Update fstab file
+  - name: Update fstab file for mysql
     lineinfile:
       path: /etc/fstab
-      line: "{{ address }}:/{{ volname }} /srv nfs defaults 0 0"
-  - name: Verify mount directory exists
+      line: "{{ address }}:/{{ volname1 }} /var/lib/mysql nfs defaults 0 0"
+
+  - name: Update fstab file for wordpress core file
+    lineinfile:
+      path: /etc/fstab
+      line: "{{ address }}:/{{ volname2 }} /var/www/html nfs defaults 0 0"
+
+  - name: Verify mount directory exists - volume1
     file:
-      path: /srv
+      path: /var/lib/mysql
       state: directory
-  - name: Mount nfs export
+
+  - name: Verify mount directory exists - volume2
+    file:
+      path: /var/www/html
+      state: directory
+
+  - name: Mount nfs export - volume1
     mount:
       state: mounted
-      path: /srv
-      src: "{{ address }}:/{{ volname }}"
+      path: /var/lib/mysql
+      src: "{{ address }}:/{{ volname1 }}"
+      fstype: nfs
+  - name: Mount nfs export - volume2
+    mount:
+      state: mounted
+      path: /var/www/html
+      src: "{{ address }}:/{{ volname2 }}"
       fstype: nfs
 ...
