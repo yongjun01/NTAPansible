@@ -74,9 +74,9 @@
   tasks:
   - name: Install NFS-UTILS package for Client Server
     yum: name=nfs-utils state=present
-      hostname: "{{ hostname }}"
-      username: "{{ username }}"
-      password: "{{ password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
   - name: Update fstab file for mysql
     lineinfile:
       path: /etc/fstab
