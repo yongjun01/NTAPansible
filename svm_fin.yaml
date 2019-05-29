@@ -22,8 +22,8 @@
     na_ontap_interface:
       state: present
       interface_name: "{{ vserver }}_lif_1"
-      home_port: e0b
-      home_node: Select-cluster-01
+      home_port: e0i
+      home_node: node1
       role: data
       protocols: nfs
       admin_status: up
