@@ -3,17 +3,12 @@
   gather_facts: false
   name: Setup ONTAP
   vars:
-    volname1: mysql_data
-    volname2: wordpress_core
-    vserver: cds_test
-    aggr: aggr1_node1
-    address: 49.254.105.77
-    policy: cdspolicy
-    state: present
     login: &login
-      hostname: 49.254.105.140
-      username: admin
-      password: Netapp123
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      https: true
+      validate_certs: false
   tasks:
   - name: Create Policy
     na_ontap_export_policy:
