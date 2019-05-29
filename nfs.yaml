@@ -81,33 +81,33 @@
     lineinfile:
       path: /etc/fstab
       line: "{{ address }}:/{{ volname1 }} /var/lib/mysql nfs defaults 0 0"
-        hostname: "{{ hostname }}"
-        username: "{{ username }}"
-        password: "{{ password }}"
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
 
   - name: Update fstab file for wordpress
     lineinfile:
       path: /etc/fstab
       line: "{{ address }}:/{{ volname2 }} /var/www/html nfs defaults 0 0"
-        hostname: "{{ hostname }}"
-        username: "{{ username }}"
-        password: "{{ password }}"
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
 
   - name: Verify mount directory exists for mysql data
     file:
       path: /var/lib/mysql
       state: directory
-        hostname: "{{ hostname }}"
-        username: "{{ username }}"
-        password: "{{ password }}"
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
 
   - name: Verify mount directory exists for wordpress core file
     file:
       path: /var/www/html
       state: directory
-        hostname: "{{ hostname }}"
-        username: "{{ username }}"
-        password: "{{ password }}"
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
 
   - name: Mount nfs export for vol1
     mount:
@@ -115,9 +115,9 @@
       path: /var/lib/mysql
       src: "{{ address }}:/{{ volname1 }}"
       fstype: nfs
-        hostname: "{{ hostname }}"
-        username: "{{ username }}"
-        password: "{{ password }}"
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
 
   - name: Mount nfs export for vol2
     mount:
@@ -125,7 +125,7 @@
       path: /var/www/html
       src: "{{ address }}:/{{ volname2 }}"
       fstype: nfs
-        hostname: "{{ hostname }}"
-        username: "{{ username }}"
-        password: "{{ password }}"
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
 ...
