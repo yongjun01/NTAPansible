@@ -1,9 +1,8 @@
-hostname: xxx.xxx.xxx.xxx
+hostname: 49.254.105.77
 username: username
 password: password
-vserver: Ansible_Handson
+vserver: cds_test
 aggr: aggr1_node1
-volname: test007
-address: xxx.xxx.xxx.xxx(lif ip)
-ansible_hostname: vdbench01
+address: 49.254.105.221
+ansible_hostname: jumphost
 state: present
