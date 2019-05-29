@@ -66,8 +66,9 @@
 
 - hosts: ansible-server
   vars:
-    address: xxx.xxx.xxx.xxx(host ip)
-    volname: test007
+    address: 49.254.105.77
+    volname1: mysql_data
+    volname2: wordpress_data
   tasks:
   - name: Install NFS-UTILS package for Client Server
     yum: name=nfs-utils state=present
