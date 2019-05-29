@@ -19,7 +19,7 @@
 #    na_ontap_export_policy:
 #      state: "{{ state }}"
 #      name: "{{ policy }}"
-v      vserver: "{{ vserver }}"
+#      vserver: "{{ vserver }}"
 #      <<: *login
   - name: Setup rules
     na_ontap_export_policy_rule:
