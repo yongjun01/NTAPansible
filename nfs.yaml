@@ -3,19 +3,25 @@
   gather_facts: false
   name: Setup ONTAP
   vars:
-    login: &login
-      hostname: "{{ hostname }}"
-      username: "{{ username }}"
-      password: "{{ password }}"
-      https: true
-      validate_certs: false
+    hostname: 49.254.105.140
+    username: admin
+    password: Netapp123
+    vserver: cds_test
+    volname1: mysql_data
+    volname2: wordpress_data
+    aggr: aggr1_node1
+    address: 49.254.105.221
+    policy: ansiblePolicy
+    state: present
   tasks:
   - name: Create Policy
     na_ontap_export_policy:
       state: "{{ state }}"
       name: "{{ policy }}"
       vserver: "{{ vserver }}"
-      <<: *login
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
   - name: Setup rules
     na_ontap_export_policy_rule:
       state: "{{ state }}"
@@ -25,8 +31,10 @@
       ro_rule: any
       rw_rule: any
       super_user_security: any
-      <<: *login
-  - name: Create volume for mysql data
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+  - name: Create volume_1
     na_ontap_volume:
       state: "{{ state }}"
       name: "{{ volname1 }}"
@@ -37,8 +45,10 @@
       junction_path: "/{{ volname1 }}"
       space_guarantee: "none"
       vserver: "{{ vserver }}"
-      <<: *login
-  - name: Create volume for wordpress core file
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+  - name: Create volume_2
     na_ontap_volume:
       state: "{{ state }}"
       name: "{{ volname2 }}"
@@ -49,13 +59,15 @@
       junction_path: "/{{ volname2 }}"
       space_guarantee: "none"
       vserver: "{{ vserver }}"
-      <<: *login
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+
 
 - hosts: ansible-server
   vars:
-    address: 49.254.105.77
-    volname1: mysql_data
-    volname2: wordpress_core
+    address: xxx.xxx.xxx.xxx(host ip)
+    volname: test007
   tasks:
   - name: Install NFS-UTILS package for Client Server
     yum: name=nfs-utils state=present
@@ -64,29 +76,25 @@
     lineinfile:
       path: /etc/fstab
       line: "{{ address }}:/{{ volname1 }} /var/lib/mysql nfs defaults 0 0"
-
-  - name: Update fstab file for wordpress core file
+  - name: Update fstab file for wordpress
     lineinfile:
       path: /etc/fstab
       line: "{{ address }}:/{{ volname2 }} /var/www/html nfs defaults 0 0"
-
-  - name: Verify mount directory exists - volume1
+  - name: Verify mount directory exists for mysql data
     file:
       path: /var/lib/mysql
       state: directory
-
-  - name: Verify mount directory exists - volume2
+  - name: Verify mount directory exists for wordpress core file
     file:
       path: /var/www/html
       state: directory
-
-  - name: Mount nfs export - volume1
+  - name: Mount nfs export for vol1
     mount:
       state: mounted
       path: /var/lib/mysql
       src: "{{ address }}:/{{ volname1 }}"
       fstype: nfs
-  - name: Mount nfs export - volume2
+  - name: Mount nfs export for vol2
     mount:
       state: mounted
       path: /var/www/html
