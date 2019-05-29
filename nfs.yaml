@@ -66,13 +66,17 @@
 
 - hosts: jumphost
   vars:
-    address: 49.254.105.77
+    jumphostname: 49.254.105.77
+    jumphostusername: root
+    jumphostpassword: Netapp123!
     volname1: mysql_data
     volname2: wordpress_data
   tasks:
   - name: Install NFS-UTILS package for Client Server
     yum: name=nfs-utils state=present
-
+    hostname: "{{ jumphostname }}"
+    username: "{{jumphostusername }}"
+    password: "{{ jumphostpassword }}"
   - name: Update fstab file for mysql
     lineinfile:
       path: /etc/fstab
