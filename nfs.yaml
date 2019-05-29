@@ -12,15 +12,15 @@
       vserver: cds_test
       aggr: aggr1_node1
       address: "{{ address }}"
-      policy: default
+      policy: cdspolicy
       state: present
   tasks:
-#  - name: Create Policy
-#    na_ontap_export_policy:
-#      state: "{{ state }}"
-#      name: "{{ policy }}"
-#      vserver: "{{ vserver }}"
-#      <<: *login
+  - name: Create Policy
+    na_ontap_export_policy:
+      state: "{{ state }}"
+      name: "{{ policy }}"
+      vserver: "{{ vserver }}"
+      <<: *login
   - name: Setup rules
     na_ontap_export_policy_rule:
       state: "{{ state }}"
